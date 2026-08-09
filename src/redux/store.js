@@ -9,13 +9,24 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import contactsReducer from "./contactsSlice";
 import filtersReducer from "./filtersSlice";
 
+const customStorage = {
+  getItem: (key) => {
+    return Promise.resolve(localStorage.getItem(key));
+  },
+  setItem: (key, item) => {
+    return Promise.resolve(localStorage.setItem(key, item));
+  },
+  removeItem: (key) => {
+    return Promise.resolve(localStorage.removeItem(key));
+  },
+};
+
 const contactsPersistConfig = {
   key: "contacts",
-  storage,
+  storage: customStorage, // Sorunlu kütüphane yerine kendi yazdığımız garantili depoyu kullanıyoruz
 };
 
 const persistedContactsReducer = persistReducer(
